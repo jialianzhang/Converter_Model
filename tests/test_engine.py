@@ -32,8 +32,8 @@ def test_engine_produces_time_series(engine, sample_input):
     result = engine.run(sample_input)
     assert '时序数据' in result
     ts = result['时序数据']
-    assert len(ts['time']) > 0
-    assert len(ts['T']) > 0
+    assert len(ts['time_s']) > 0
+    assert len(ts['T_C']) > 0
 
 
 def test_endpoint_C_approaches_target(engine, sample_input):

@@ -20,7 +20,7 @@ MGO_TARGET = 8.0             # 目标 MgO %
 # Kitamura 标准条件参数 (Table 2)
 KITAMURA_BASE = {
     'k_m0': 2.0e-4,       # 基准钢液传质系数 m/s
-    'k_s0': 1.0e-5,       # 基准炉渣传质系数 m/s
+    'k_s0': 5.0e-4,       # 基准炉渣传质系数 m/s (工业转炉CO+O2搅拌)
     'q_Ar0': 0.00033,     # 基准氩气流量 Nm³/s (≈20 NL/min)
     'W_s0': 2.0,          # 基准炉渣质量 kg (渣钢比≈2%)
     'G_CO0': 0.01,        # 基准CO生成速率 mol/(s·m²)
