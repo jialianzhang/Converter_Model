@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+.ipynb_checkpoints/
+*.pdf
+*.txt
+papers/
+data/results/
+data/calibrated/
+.claude/
