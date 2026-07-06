@@ -24,7 +24,7 @@ def run_single_heat(input_dict=None):
     print(f"终点C: {result['终点C']:.4f}%")
     print(f"终点T: {result['终点T']:.1f}°C")
     print(f"模拟步数: {result['步数']}")
-    print(f"吹炼时间: {result['时序数据']['time'][-1]:.0f}s")
+    print(f"吹炼时间: {result['时序数据']['time_s'][-1]:.0f}s")
     return result
 
 def run_batch(input_csv, output_csv=None):
