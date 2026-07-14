@@ -8,8 +8,20 @@ class InputReader:
         return df.to_dict('records')
 
     @staticmethod
+    def _opt_float(row, key):
+        """可选列: 缺失/空/NaN → None"""
+        v = row.get(key, None)
+        if v is None:
+            return None
+        try:
+            f = float(v)
+        except (TypeError, ValueError):
+            return None
+        return None if f != f else f   # NaN 检查
+
+    @staticmethod
     def parse_single_heat(row):
-        return {
+        out = {
             '铁水质量': float(row.get('铁水质量', 170)),
             '铁水温度': float(row.get('铁水温度', 1276)),
             'w([C])': float(row.get('w_C', 4.48)),
@@ -32,3 +44,14 @@ class InputReader:
             '喷嘴夹角': float(row.get('喷嘴夹角', 12.0)),
             '熔池深度': float(row.get('熔池深度', 1.8)),
         }
+        # 标定用实测终点列 (C/T 必填才能参与标定, FeO 强烈建议 —— 防FeO与二次燃烧率补偿)
+        out['终点C_actual'] = InputReader._opt_float(row, '终点C_actual')
+        out['终点T_actual'] = InputReader._opt_float(row, '终点T_actual')
+        out['终点FeO_actual'] = InputReader._opt_float(row, '终点FeO_actual')
+        # 可选扩展列: 实际辅料量/耗氧量由引擎优先消费 (替代静态估算);
+        # 终点O_actual_ppm(副枪TSO氧)/出钢量_actual 为终渣FeO缺失时的替代约束指标
+        for key in ['终点P_actual', '终点Mn_actual', '实际石灰kg', '实际白云石kg',
+                    '实际烧结矿kg', '实际耗氧量Nm3', '吹炼时长s', '炉龄',
+                    '终点O_actual_ppm', '出钢量_actual']:
+            out[key] = InputReader._opt_float(row, key)
+        return out

@@ -27,9 +27,17 @@ def test_lime_addition_positive(static_model, sample_input):
     assert result['石灰加入量'] > 0
 
 def test_iron_loss_calculation(static_model, sample_input):
+    # 铁耗基于热平衡反算的合理废钢量(非输入废钢), 内部自洽性检查
     result = static_model.calculate(sample_input)
-    expected_bl = (sample_input['铁水质量'] + sample_input['废钢加入量']) / result['出钢量'] * 1000
+    expected_bl = (sample_input['铁水质量'] + result['合理废钢量']) / result['出钢量'] * 1000
     assert abs(result['铁耗'] - expected_bl) < 1.0
+
+def test_scrap_backcalc_reasonable(static_model, sample_input):
+    # 张强表2: 合理废钢量约 16.91t, 反算值应在合理范围
+    result = static_model.calculate(sample_input)
+    assert 5.0 < result['合理废钢量'] < 40.0
+    assert '热平衡明细_MJ' in result
+    assert '校验' in result   # sample_input 含废钢加入量 → 应输出校验
 
 def test_oxygen_consumption_reasonable(static_model, sample_input):
     result = static_model.calculate(sample_input)

@@ -40,7 +40,7 @@ def run_batch(input_csv, output_csv=None):
             '炉次': i + 1,
             '终点C_预测': result['终点C'],
             '终点T_预测': result['终点T'],
-            '吹炼时间_s': result['时序数据']['time'][-1],
+            '吹炼时间_s': result['时序数据']['time_s'][-1],
         })
         print(f"炉次 {i+1}/{len(heats)}: C={result['终点C']:.4f}%, T={result['终点T']:.1f}°C")
 
@@ -49,9 +49,36 @@ def run_batch(input_csv, output_csv=None):
         print(f"结果已保存到 {output_csv}")
     return results
 
+def run_calibration(input_csv, output_txt=None):
+    """参数标定: 一组共享参数联合优化 N 炉 (70%训练/30%验证)
+    CSV 格式见 data/raw/heats_template.csv, 需含实测列 终点C_actual/终点T_actual
+    (终点FeO_actual 强烈建议提供 —— 防止 FeO 与二次燃烧率互相补偿)"""
+    from calibration.optimizer import Calibrator
+    reader = InputReader()
+    heats = [reader.parse_single_heat(h) for h in reader.read_csv(input_csv)]
+    heats = [h for h in heats if h['终点C_actual'] is not None and h['终点T_actual'] is not None]
+    if len(heats) < 2:
+        print(f"可用炉次不足 ({len(heats)}): 标定需要多炉实测数据 (终点C_actual/终点T_actual 列)")
+        return None
+    print(f"=== 参数标定: {len(heats)} 炉 (70%训练/30%验证) ===")
+    report = Calibrator().calibrate(heats)
+    lines = ["=== 标定结果 ==="]
+    for k, v in report.items():
+        lines.append(f"{k}: {v}")
+    text = "\n".join(lines)
+    print(text)
+    if output_txt:
+        with open(output_txt, 'w', encoding='utf-8') as f:
+            f.write(text + "\n")
+        print(f"结果已保存到 {output_txt}")
+    return report
+
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
+    if len(sys.argv) > 1 and sys.argv[1] == 'calibrate':
+        run_calibration(sys.argv[2] if len(sys.argv) > 2 else 'data/raw/heats.csv',
+                        sys.argv[3] if len(sys.argv) > 3 else 'data/calibrated/calibration_result.txt')
+    elif len(sys.argv) > 1:
         run_batch(sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else None)
     else:
-        print("=== 转炉冶炼终点预测模型 V2 ===")
+        print("=== 转炉冶炼终点预测模型 ===")
         run_single_heat()

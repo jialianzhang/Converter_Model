@@ -2,7 +2,8 @@
 import numpy as np
 from config import T_REF, R_GAS
 
-WAGNER_E_1E4 = {
+# 相互作用系数 e_i^j × 100 @1873K (Sigworth & Elliott 1974; 如 e_C^C=0.14 存为 14.0)
+WAGNER_E_1E2 = {
     'C':  {'C': 14.0, 'Si': 8.0,  'Mn': -1.2, 'P': 5.1,  'S': 4.6,  'O': -34.0},
     'Si': {'C': 18.0, 'Si': 11.0, 'Mn': 0.2,  'P': 11.0, 'S': 5.6,  'O': -23.0},
     'Mn': {'C': -7.0, 'Si': 0.0,  'Mn': 0.0,  'P': -0.35,'S': -4.8, 'O': -8.3},
@@ -16,7 +17,7 @@ WAGNER_E_1E4 = {
 
 
 def get_e_ij(element_i: str, element_j: str, T: float) -> float:
-    e0 = WAGNER_E_1E4.get(element_i, {}).get(element_j, 0.0) * 1e-4
+    e0 = WAGNER_E_1E2.get(element_i, {}).get(element_j, 0.0) * 1e-2
     return e0 * T_REF / T
 
 

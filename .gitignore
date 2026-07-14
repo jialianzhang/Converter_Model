@@ -12,3 +12,7 @@ papers/
 data/results/
 data/calibrated/
 .claude/
+# 生产数据 (专有, 不入仓库防泄漏; 仅模板 heats_template.csv 保留)
+data/raw/heats_100.csv
+data/raw/heats.csv
+data/rael/

@@ -22,9 +22,11 @@ def test_calc_all_includes_carbon_special_case():
     E_M = {'C': 50, 'Si': 100, 'Mn': 80, 'P': 60, 'V': 40, 'Ti': 50, 'Fe': 20}
     result = ic.calc_all(F_dict, steel_b, slag_b, E_M, a_O_star=1e-4, G_CO=0.01, K_C=50.0)
     assert 'w([C])*' in result
-    assert len(result) == 7  # C, Si, Mn, P, V, Ti, Fe
+    assert len(result) == 6  # C, Si, Mn, P, V, Ti (Fe为溶剂, FeO通量由渣侧在engine中单独控制)
     for v in result.values():
         assert v >= 0
+    # CO不会重新渗碳: 界面碳浓度不高于本体
+    assert result['w([C])*'] <= steel_b['w([C])b'] + 1e-12
 
 
 def test_carbon_formula_uses_G_CO():
@@ -37,6 +39,7 @@ def test_carbon_formula_uses_G_CO():
     slag_b = {'w((SiO2))b': 15.0, 'w((MnO))b': 5.0, 'w((P2O5))b': 3.0,
               'w((FeO))b': 20.0, 'w((V2O3))b': 0.0, 'w((TiO2))b': 0.0}
     E_M = {'C': 50, 'Si': 100, 'Mn': 80, 'P': 60, 'V': 40, 'Ti': 50, 'Fe': 20}
-    r1 = ic.calc_all(F_dict, steel_b, slag_b, E_M, a_O_star=1e-4, G_CO=0.01, K_C=50.0)
-    r2 = ic.calc_all(F_dict, steel_b, slag_b, E_M, a_O_star=1e-4, G_CO=10.0, K_C=50.0)
+    # a_O*=0.01 高于该条件下 C/CO 平衡值, 界面浓度未触发钳位, G_CO 才有区分度
+    r1 = ic.calc_all(F_dict, steel_b, slag_b, E_M, a_O_star=0.01, G_CO=0.01, K_C=50.0)
+    r2 = ic.calc_all(F_dict, steel_b, slag_b, E_M, a_O_star=0.01, G_CO=10.0, K_C=50.0)
     assert r1['w([C])*'] != r2['w([C])*']
