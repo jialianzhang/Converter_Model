@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import sys,io,os; ROOT=os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0,ROOT)
+import sys,io,os; ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0,ROOT)   # scripts/ 上一级 = 项目根
 sys.stdout=io.TextIOWrapper(sys.stdout.buffer,encoding='utf-8')
 import numpy as np
 from model.engine import Engine
@@ -17,7 +17,7 @@ def curve(h,eta=0.45):
     return t,aO,ppm,wc,coeq
 z={'铁水质量':170.0,'铁水温度':1276.0,'w([C])':4.48,'w([Si])':0.34,'w([Mn])':0.19,'w([P])':0.117,'w([S])':0.01,'w([V])':0.0,'w([Ti])':0.0,'废钢加入量':17.0,'供氧流量':850.0,'底吹氩气流量':11.5,'炉渣碱度':3.0,'MgO目标含量':8.0,'终点碳目标':0.04,'终点温度目标':1650.0,'枪位高度':1.5,'喷嘴直径':0.05,'喷嘴夹角':12.0,'熔池深度':1.8,'终点C_actual':0.04}
 t,aO,ppm,wc,coeq=curve(z)
-heats=[InputReader.parse_single_heat(r) for r in InputReader.read_csv('data/raw/heats_100.csv')]
+heats=[InputReader.parse_single_heat(r) for r in InputReader.read_csv(os.path.join(ROOT,'data','raw','heats_100.csv'))]
 mp=[];ap=[]
 for h in heats:
     if h.get('终点O_actual_ppm') is None: continue

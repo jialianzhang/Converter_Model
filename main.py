@@ -1,4 +1,10 @@
-"""转炉冶炼终点预测模型 V2 - 主入口"""
+"""转炉冶炼终点预测模型 (V1.0 冻结版) - 主入口
+
+用法:
+    python main.py                     # 单炉演示 (张强炉工况, 默认参数=冻结生产模型)
+    python main.py <heats.csv> [out]   # 批量预测
+    python main.py calibrate <csv>     # 参数标定 (设备级常数, 换炉役/换喷头时重跑)
+项目结构与文档索引见 README.md; 工作流脚本在 scripts/。"""
 import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))

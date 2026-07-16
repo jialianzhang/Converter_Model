@@ -4,7 +4,7 @@
 ③ 冻结参数固化 data/calibrated/v1_frozen_params.json
 结果存 data/results/freeze_v1_output.txt"""
 import sys, io, os, json
-ROOT = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, ROOT)
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, ROOT)   # scripts/ 上一级 = 项目根
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 import numpy as np
 from model.engine import Engine

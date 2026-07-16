@@ -10,7 +10,7 @@
 终止模式: 氧锚定 (吹入每炉实际耗氧量后读终点, 避免"碳目标=实测碳"的循环验证)。
 """
 import sys, io, os, time
-ROOT = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))   # scripts/ 上一级 = 项目根
 sys.path.insert(0, ROOT)
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 

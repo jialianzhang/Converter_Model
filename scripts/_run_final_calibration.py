@@ -9,7 +9,7 @@
 结果: data/calibrated/final_calibration_v1.txt
 """
 import sys, io, os, time
-ROOT = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, ROOT)
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, ROOT)   # scripts/ 上一级 = 项目根
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 from iomodules.input_reader import InputReader
 

@@ -5,7 +5,7 @@
 3) 标定链路端到端可跑 (3 炉合成数据, 少量迭代)
 结果保存到 data/results/calib_smoke_output.txt"""
 import sys, io, os, copy
-ROOT = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))   # scripts/ 上一级 = 项目根
 sys.path.insert(0, ROOT)
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
@@ -32,10 +32,11 @@ emit("    冻结模型稳定: %s" % ("通过" if ok1 else "失败!"))
 r_post = Engine(params={'eta_post': 0.20}).run(base)
 emit("[2] eta_post 0.10→0.20: T %.1f → %.1f (应升高): %s" % (
     r0['终点T'], r_post['终点T'], "通过" if r_post['终点T'] > r0['终点T'] + 5 else "失败!"))
+# 冻结默认 eta_O2_late=0.45; 升到 0.6 → 末期入铁氧保留率上升 → 终点 FeO 应升高 (单调)
 r_late = Engine(params={'eta_O2_late': 0.6}).run(base)
 feo0 = r0['时序数据']['w_FeO'][-1]; feo1 = r_late['时序数据']['w_FeO'][-1]
-emit("[3] eta_O2_late 1.0→0.6: 终点FeO %.1f%% → %.1f%% (应降低): %s" % (
-    feo0, feo1, "通过" if feo1 < feo0 - 2 else "失败!"))
+emit("[3] eta_O2_late 0.45→0.60: 终点FeO %.1f%% → %.1f%% (应升高): %s" % (
+    feo0, feo1, "通过" if feo1 > feo0 + 2 else "失败!"))
 
 # 3) 标定链路 (3 炉合成: 输入微扰, 实测取论文值; 仅证明链路可跑)
 h1 = base
