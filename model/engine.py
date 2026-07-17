@@ -221,17 +221,17 @@ class Engine:
             ledger['O_blown'] += O_total_mol
             ledger['O_escape'] += O_total_mol * O2_SHARE['escape']
             # 末期"入铁氧保留率" retain (A方向): 高碳时=1 (剩余氧全部生成FeO),
-            # 碳降到 c_ref=1% 以下线性降到 eta_O2_late。物理: 碳降低→火点碳饥饿→
+            # 碳降到 c_ref=1% 以下线性降到 eta_O2_late。物理: 碳降低→冲击区碳饥饿→
             # 部分过剩氧来不及反应, 以未反应O2/炉膛后燃逸出而非全部生成FeO。
             # 只作用于"入铁"通道 (下方), 碳/Si/Mn 供氧不动 → 既压末期FeO又不伤脱碳。
             retain = self.p['eta_O2_late'] + (1.0 - self.p['eta_O2_late']) * min(w_C_pct / 1.0, 1.0)
 
             # === Step 4a: 冲击区直接氧化 (氧账本分配, 剩余全部 Fe→FeO) ===
-            # 火点暴露的主要是 Fe(~95%), 大部分 O2 先生成 FeO 入渣, 再由渣-金界面
+            # 冲击区暴露的主要是 Fe(~95%), 大部分 O2 先生成 FeO 入渣, 再由渣-金界面
             # 耦合反应还原 (间接氧化/传氧机制); 元素选择性由耦合求解器的热力学决定
             direct_oxidized = {}
             si_frac = O2_SHARE['Si'] if steel_kg.get('Si', 0) > 0.01 else 0.0
-            # 冲击区 Mn 门控 (13.22 修复之二): 火点直接氧化 Mn 必须尊重渣金平衡——
+            # 冲击区 Mn 门控 (13.22 修复之二): 冲击区直接氧化 Mn 必须尊重渣金平衡——
             # 熔池 Mn 已低于与当前渣 (MnO)/氧势 的平衡值时, 烧掉的 Mn 会被渣立刻还回,
             # 净通道关闭。旧实现无热力学背压, 末期把 Mn 生吃到 0 (0.078 实测 vs 0.002)。
             w_Mn_eq_gate = slag_wt.get('MnO', 0.0) / max(E_M['Mn'] * self._a_O_bulk_prev, 1e-9)

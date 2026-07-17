@@ -96,7 +96,7 @@ gen = np.array(s['feo_gen_impact']); ifc = np.array(s['feo_net_iface']); dep = n
 P('FeO 三通道分期收支 (t):')
 for (a, b), lab in zip([(0, .33), (.33, .66), (.66, 1.001)], ['前期', '中期', '末期']):
     m = (tarr >= a * tend) & (tarr < b * tend)
-    P('  %s: 火点生成 %+.1f | 界面净 %+.1f | 脱磷 %+.2f | 净 %+.1f' % (
+    P('  %s: 冲击区生成 %+.1f | 界面净 %+.1f | 脱磷 %+.2f | 净 %+.1f' % (
         lab, gen[m].sum() / 1000, ifc[m].sum() / 1000, dep[m].sum() / 1000,
         (gen[m] + ifc[m] + dep[m]).sum() / 1000))
 

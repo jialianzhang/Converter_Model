@@ -30,10 +30,10 @@ KITAMURA_BASE = {
 # 炉渣传质的工业尺度基准渣量 (替代 40/m_slag 无量纲因子; k_s' = k_s0·stir·(SLAG_REF_MASS/m_slag))
 SLAG_REF_MASS = 10000.0   # kg, 标定参数
 
-# 冲击区(火点)O₂分配份额 (氧账本: 其余全部 [Fe]+1/2O₂→(FeO) 供渣-金界面耦合反应)
-# 注: 火点直接脱碳份额 C_direct 已移入 CALIBRATION_DEFAULTS (标定参数, 引擎从 self.p 读取)
+# 冲击区 O₂分配份额 (氧账本: 其余全部 [Fe]+1/2O₂→(FeO) 供渣-金界面耦合反应)
+# 注: 冲击区直接脱碳份额 C_direct 已移入 CALIBRATION_DEFAULTS (标定参数, 引擎从 self.p 读取)
 O2_SHARE = {
-    'Si': 0.08,           # Si 存在期间的火点直接氧化份额 (耗尽后份额转给FeO)
+    'Si': 0.08,           # Si 存在期间的冲击区直接氧化份额 (耗尽后份额转给FeO)
     'Mn': 0.02,           # Mn 同上
     'escape': 0.05,       # 二次燃烧耗氧/烟气逸散等未入熔池部分
 }
@@ -68,7 +68,7 @@ CALIBRATION_DEFAULTS = {
     'eta_post': 0.10035,      # 二次燃烧比例
     'Q_rad_W': 2224473.16,    # 辐射+炉衬综合散热 W
     'A_emulsion': 317.5931,   # 乳化液滴有效反应面积 m²
-    'C_direct': 0.24952,      # 火点直接脱碳份额
+    'C_direct': 0.24952,      # 冲击区直接脱碳份额
     'eta_O2_late': 0.45,      # 末期"入铁氧保留率"下限 (由终渣FeO工业范围物理定值, 标定中固定)
     'scrap_tau_heat': 209.06472,  # 废钢升温弛豫时间常数 s
     'scrap_heat_scale': 0.60007,  # 废钢热汇缩放 (触下界, 吸收废钢比结构残差)

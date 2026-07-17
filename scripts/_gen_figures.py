@@ -93,7 +93,7 @@ for a, b in [(0, .33), (.33, .66), (.66, 1.001)]:
     G.append(gen[m].sum()/1000); I.append(ifc[m].sum()/1000); D.append(dep[m].sum()/1000)
 x = np.arange(3); w = 0.27
 fig, ax = plt.subplots(1, 2, figsize=(8.6, 3.2))
-ax[0].bar(x-w, G, w, color=C_ORANGE, label='火点生成 Fe+½O$_2$→FeO')
+ax[0].bar(x-w, G, w, color=C_ORANGE, label='冲击区生成 Fe+½O$_2$→FeO')
 ax[0].bar(x,   I, w, color=C_BLUE, label='界面净通量(负=被C还原)')
 ax[0].bar(x+w, D, w, color=C_PURPLE, label='脱磷消耗')
 net = np.array(G)+np.array(I)+np.array(D)
@@ -175,7 +175,7 @@ fig.tight_layout(); save(fig, 'fig07_终点渣组分对照.png')
 
 # ---------- 图8: 氧账本 ----------
 ox = r_rep['氧账本']
-items = [('直接氧化\n(火点+入铁)', ox['O_direct_mol']), ('界面注入\n(溶解氧)', ox['O_interface_inj_mol']),
+items = [('直接氧化\n(冲击区+入铁)', ox['O_direct_mol']), ('界面注入\n(溶解氧)', ox['O_interface_inj_mol']),
          ('逸散/后燃', ox['O_escape_mol'])]
 fig, ax = plt.subplots(figsize=(4.6, 3.4))
 total = ox['O_blown_mol']; left = 0
